@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 
-@Injectable()   // Đánh dấu đây là một Provider
+@Injectable({
+    scope: Scope.TRANSIENT
+})   // Đánh dấu đây là một Provider
+
 export class SongsService {
     private readonly songs = [];
 
@@ -15,6 +18,5 @@ export class SongsService {
 
         // Errors comes while fetching the data
         // throw new Error("Error in Database while fetching records");    // 500 - "Internal server error"
-
     }
 }
