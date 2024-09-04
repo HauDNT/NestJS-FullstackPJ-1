@@ -5,6 +5,7 @@ import { Song } from './song.entity';
 import { CreateSongDTO } from './dto/create-song.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateSongDTO } from './dto/update-song.dto';
+import { Artist } from 'src/artists/artist.entity';
 
 @Injectable({
     scope: Scope.TRANSIENT
@@ -14,9 +15,11 @@ export class SongsService {
     constructor(
         @InjectRepository(Song)
         private songsRepository: Repository<Song>,
+        @InjectRepository(Artist)
+        private artistsRepository: Repository<Artist>,
     ) {}
 
-    create(songDTO: CreateSongDTO): Promise<Song> {
+    async create(songDTO: CreateSongDTO): Promise<Song> {
         const newSong = new Song();
 
         newSong.title = songDTO.title;
@@ -24,6 +27,12 @@ export class SongsService {
         newSong.duration = songDTO.duration;
         newSong.lyrics = songDTO.lyrics;
         newSong.releasedDate = songDTO.releasedDate;
+
+        // Find all the artists on the bases on ids
+        const artists = await this.artistsRepository.findByIds(songDTO.artists);
+
+        // Set the relation with artist and songs
+        newSong.artists = artists;
 
         return this.songsRepository.save(newSong);
     }

@@ -1,3 +1,4 @@
+import { IsNotEmpty } from "class-validator";
 import { Artist } from "src/artists/artist.entity";
 import { Playlist } from "src/playlists/playlist.entity";
 import {
