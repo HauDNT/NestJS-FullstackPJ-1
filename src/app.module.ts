@@ -12,11 +12,14 @@ import { User } from './users/user.entity';
 import { Playlist } from './playlists/playlist.entity';
 import { PlaylistModule } from './playlists/playlists.module';
 import { DataSource } from 'typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
 
 @Module({
     imports: [
+        AuthModule,
         SongsModule,
         PlaylistModule,
         TypeOrmModule.forRoot({     // Config TypeOrmModule to connect database and create tables & relations
@@ -29,6 +32,7 @@ const proConfig = { port: 4000 };
             entities: [Song, Artist, User, Playlist],
             synchronize: true,
         }),
+        UsersModule,
     ],
     controllers: [AppController],
     providers: [
