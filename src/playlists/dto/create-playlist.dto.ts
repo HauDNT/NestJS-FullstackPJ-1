@@ -13,7 +13,7 @@ export class CreatePlaylistDTO {
     @IsNotEmpty()
     @IsArray()
     @IsNumber({}, { each: true})
-    readonly songs;
+    readonly songs: [];
 
     @IsNumber()
     @IsNotEmpty()
