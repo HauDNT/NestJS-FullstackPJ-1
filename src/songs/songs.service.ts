@@ -45,11 +45,25 @@ export class SongsService {
         return this.songsRepository.findOneBy({id});
     }
 
-    update(
+    async update(
         id: number,
         updateSongDTO: UpdateSongDTO
-    ): Promise<UpdateResult> {
-        return this.songsRepository.update(id, updateSongDTO);
+    ): Promise<Song> {
+        const song = await this.songsRepository.findOneBy({id});
+
+        song.title = updateSongDTO.title;
+        song.artists = updateSongDTO.artists;
+        song.duration = updateSongDTO.duration;
+        song.lyrics = updateSongDTO.lyrics;
+        song.releasedDate = updateSongDTO.releasedDate;
+
+        // Find all the artists on the bases on ids
+        const artists = await this.artistsRepository.findByIds(updateSongDTO.artists);
+
+        // Set the relation with artist and songs
+        song.artists = artists;
+
+        return this.songsRepository.save(song);
     }
 
     remove(id: number): Promise<DeleteResult> {
