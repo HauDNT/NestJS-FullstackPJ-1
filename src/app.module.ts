@@ -5,11 +5,30 @@ import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { SongsController } from './songs/songs.controller';
 import { DevConfigService } from './common/providers/DevConfigService';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Song } from './songs/song.entity';
+import { Artist } from './artists/artist.entity';
+import { User } from './users/user.entity';
+import { Playlist } from './playlists/playlist.entity';
+import { PlaylistModule } from './playlists/playlists.module';
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
 
 @Module({
-    imports: [SongsModule],
+    imports: [
+        SongsModule,
+        PlaylistModule,
+        TypeOrmModule.forRoot({     // Config TypeOrmModule to connect database and create tables & relations
+            type: 'mysql',
+            database: 'nestjs-freeCodeCamp',
+            host: 'localhost',
+            port: 5000,
+            username: 'root',
+            password: '123456',
+            entities: [Song, Artist, User, Playlist],
+            synchronize: true,
+        }),
+    ],
     controllers: [AppController],
     providers: [
         AppService,
