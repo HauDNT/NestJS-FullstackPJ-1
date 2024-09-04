@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SongsModule } from './songs/songs.module';
@@ -22,6 +22,7 @@ const proConfig = { port: 4000 };
         AuthModule,
         SongsModule,
         PlaylistModule,
+        UsersModule,
         TypeOrmModule.forRoot({     // Config TypeOrmModule to connect database and create tables & relations
             type: 'mysql',
             database: 'nestjs-freeCodeCamp',
@@ -32,7 +33,6 @@ const proConfig = { port: 4000 };
             entities: [Song, Artist, User, Playlist],
             synchronize: true,
         }),
-        UsersModule,
     ],
     controllers: [AppController],
     providers: [
