@@ -6,7 +6,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthContants } from './auth.contants';
 import { JwtStrategy } from './jwt/jwt-strategy';
 import { ArtistsModule } from 'src/artists/artists.module';
-import { ArtistsService } from 'src/artists/artists.service';
 
 @Module({
     imports: [
