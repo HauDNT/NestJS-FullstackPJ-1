@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
 import { dataSourceOptions } from 'db/data-source';
+import { SeedModule } from './seed/seed.module';
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
 
@@ -26,7 +27,8 @@ const proConfig = { port: 4000 };
         PlaylistModule,
         UsersModule,
         TypeOrmModule.forRoot(dataSourceOptions),     // Config TypeOrmModule to connect database and create tables & relations
-        ArtistsModule,
+        ArtistsModule, 
+        SeedModule,
     ],
     controllers: [AppController],
     providers: [
