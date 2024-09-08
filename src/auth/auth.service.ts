@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ArtistsService } from 'src/artists/artists.service';
 import { Enable2FAType, PayLoadType } from '../common/constants/types';
 import { UpdateResult } from 'typeorm';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,10 @@ export class AuthService {
         private jwtService: JwtService,
         private artistsService: ArtistsService,
     ) { }
+
+    async validateUserByApiKey(apiKey: string): Promise<User> {
+        return this.usersService.findByApiKey(apiKey);
+    }
 
     async login(loginDTO: LoginDTO): Promise<{ accessToken: string } | { validate2FA: string; message: string; }> {
         const user = await this.usersService.findOne(loginDTO);
