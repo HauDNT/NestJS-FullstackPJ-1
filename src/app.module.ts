@@ -15,6 +15,7 @@ import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
+import { dataSourceOptions } from 'db/data-source';
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
 
@@ -24,16 +25,7 @@ const proConfig = { port: 4000 };
         SongsModule,
         PlaylistModule,
         UsersModule,
-        TypeOrmModule.forRoot({     // Config TypeOrmModule to connect database and create tables & relations
-            type: 'mysql',
-            database: 'nestjs-freeCodeCamp',
-            host: 'localhost',
-            port: 5000,
-            username: 'root',
-            password: '123456',
-            entities: [Song, Artist, User, Playlist],
-            synchronize: true,
-        }),
+        TypeOrmModule.forRoot(dataSourceOptions),     // Config TypeOrmModule to connect database and create tables & relations
         ArtistsModule,
     ],
     controllers: [AppController],
@@ -52,9 +44,7 @@ const proConfig = { port: 4000 };
     ],
 })
 export class AppModule implements NestModule { 
-    constructor (private dataSource: DataSource) {
-        console.log("Database name: ", dataSource.driver.database);
-    }
+    constructor (private dataSource: DataSource) { }
 
     configure(consumer: MiddlewareConsumer) {
         // // Option 1
