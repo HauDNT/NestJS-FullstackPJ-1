@@ -6,27 +6,34 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { SongsController } from './songs/songs.controller';
 import { DevConfigService } from './common/providers/DevConfigService';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Song } from './songs/song.entity';
-import { Artist } from './artists/artist.entity';
-import { User } from './users/user.entity';
-import { Playlist } from './playlists/playlist.entity';
 import { PlaylistModule } from './playlists/playlists.module';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
-import { dataSourceOptions } from 'db/data-source';
+import { dataSourceOptions, typeOrmAsyncConfig } from 'db/data-source';
 import { SeedModule } from './seed/seed.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration'
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            envFilePath: [
+                '.env.development',
+                '.env.production',
+            ],
+            isGlobal: true,
+            load: [configuration]
+        }),
         AuthModule,
         SongsModule,
         PlaylistModule,
         UsersModule,
-        TypeOrmModule.forRoot(dataSourceOptions),     // Config TypeOrmModule to connect database and create tables & relations
+        // TypeOrmModule.forRoot(dataSourceOptions),     // Config TypeOrmModule to connect database and create tables & relations
+        TypeOrmModule.forRootAsync(typeOrmAsyncConfig),     // Config TypeOrmModule to connect database and create tables & relations
         ArtistsModule, 
         SeedModule,
     ],

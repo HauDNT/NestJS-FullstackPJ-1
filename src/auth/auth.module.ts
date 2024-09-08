@@ -7,13 +7,18 @@ import { AuthContants } from './auth.contants';
 import { JwtStrategy } from './jwt/jwt-strategy';
 import { ArtistsModule } from 'src/artists/artists.module';
 import { ApiKeyStrategy } from './api-key/api-key-strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [
         UsersModule, 
-        JwtModule.register({
-            secret: AuthContants.secretKey, 
-            signOptions: {expiresIn: '1d'}
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                secret: configService.get<string>('secret_key'), 
+                signOptions: {expiresIn: '1d'},
+            }),
+            inject: [ConfigService],
         }),
         ArtistsModule,
     ],
