@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SeedService } from './seed/seed.service';
 import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 declare const module: any;
 
@@ -11,6 +12,15 @@ async function bootstrap() {
 
     // Apply validation pipe for DTO:
     app.useGlobalPipes(new ValidationPipe());
+
+    const config = new DocumentBuilder()
+        .setTitle('NestJS Funcamentals APIs')
+        .setDescription('NestJS Fundamentals APIs document')
+        .setVersion('1.0')
+        .build();
+
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
 
     // Auto using seeder db (enable whenever need to use):
     // const seedService = app.get(SeedService);
